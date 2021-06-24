@@ -47,13 +47,6 @@ export default [
     Action: [
       'dynamodb:Query'
     ],
-    Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MESSAGES_TABLE}/index/${self:provider.environment.MESSAGE_CREATED_AT_INDEX}'
-  },
-  {
-    Effect: 'Allow',
-    Action: [
-      'dynamodb:Query'
-    ],
     Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MESSAGES_TABLE}/index/${self:provider.environment.MESSAGE_BOARD_ID_INDEX}'
   },
 ]

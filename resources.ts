@@ -84,22 +84,6 @@ export default {
         ],
         GlobalSecondaryIndexes: [
           {
-            IndexName: "${self:provider.environment.MESSAGE_CREATED_AT_INDEX}",
-            KeySchema: [
-              {
-                AttributeName: 'id',
-                KeyType: 'HASH'
-              },    
-              {
-                AttributeName: 'createdAt',
-                KeyType: 'RANGE'
-              }
-            ],
-            Projection: {
-              ProjectionType: 'ALL'
-            }
-          },
-          {
             IndexName: "${self:provider.environment.MESSAGE_BOARD_ID_INDEX}",
             KeySchema: [
               {

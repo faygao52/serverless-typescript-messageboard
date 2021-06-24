@@ -5,6 +5,5 @@ export default {
   USER_POSTED_BOARDS_TABLE: "User-Posted-Boards-${self:provider.stage}",
   MESSAGES_TABLE: "Messages-${self:provider.stage}",
   MESSAGE_BOARD_ID_INDEX: "MessageBoardIdIndex",
-  MESSAGE_CREATED_AT_INDEX: "MessageCreatedAtIndex",
   SLS_DEBUG: "*"
 }

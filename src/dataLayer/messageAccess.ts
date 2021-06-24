@@ -8,27 +8,30 @@ export default class MessageAccess {
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly messagesTable = process.env.MESSAGES_TABLE,
     private readonly messageBoardIdIndex = process.env.MESSAGE_BOARD_ID_INDEX,
-    private readonly messageCreatedAtIndex = process.env.MESSAGE_CREATED_AT_INDEX
   ) {}
 
   async getAllMessage(boardId?: string, startFrom?: string, endAt?: string): Promise<Message[]> {
-    let ExpressionAttributeValues = {}
-    let IndexName = this.messageCreatedAtIndex
-    let KeyConditionExpression = ''
     let result
-
+    let ExpressionAttributeValues = {}
     // If no param are given, do a scan instead of query
-    if (!boardId && !startFrom) {
+    if (!boardId) {
+      let FilterExpression = ''
+      if (startFrom) {
+        endAt = endAt || new Date().toISOString()
+        ExpressionAttributeValues[':startFrom'] = startFrom
+        ExpressionAttributeValues[':endAt'] = endAt
+        FilterExpression = 'createdAt between :startFrom and :endAt'
+      }
       result = await this.docClient.scan({
-        TableName: this.messagesTable
+        TableName: this.messagesTable,
+        FilterExpression,
+        ExpressionAttributeValues
       }).promise()
     } else {
-      if (boardId) {
-        IndexName = this.messageBoardIdIndex
-        ExpressionAttributeValues[':boardId'] = boardId
-        KeyConditionExpression = 'boardId = :boardId'
+      ExpressionAttributeValues = {
+        ':boardId' : boardId
       }
-  
+      let KeyConditionExpression = 'boardId = :boardId'
       // If start from passed, set the end at to now
       if (startFrom) {
         endAt = endAt || new Date().toISOString()
@@ -39,7 +42,7 @@ export default class MessageAccess {
       }
       result = await this.docClient.query({
           TableName: this.messagesTable,
-          IndexName,
+          IndexName: this.messageBoardIdIndex,
           KeyConditionExpression,
           ExpressionAttributeValues
       }).promise()
