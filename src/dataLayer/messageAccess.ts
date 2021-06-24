@@ -15,27 +15,35 @@ export default class MessageAccess {
     let ExpressionAttributeValues = {}
     let IndexName = this.messageCreatedAtIndex
     let KeyConditionExpression = ''
+    let result
 
-    if (boardId) {
-      IndexName = this.messageBoardIdIndex
-      ExpressionAttributeValues[':boardId'] = boardId
-      KeyConditionExpression = 'boardId = :boardId'
+    // If no param are given, do a scan instead of query
+    if (!boardId && !startFrom) {
+      result = await this.docClient.scan({
+        TableName: this.messagesTable
+      }).promise()
+    } else {
+      if (boardId) {
+        IndexName = this.messageBoardIdIndex
+        ExpressionAttributeValues[':boardId'] = boardId
+        KeyConditionExpression = 'boardId = :boardId'
+      }
+  
+      // If start from passed, set the end at to now
+      if (startFrom) {
+        endAt = endAt || new Date().toISOString()
+        ExpressionAttributeValues[':startFrom'] = startFrom
+        ExpressionAttributeValues[':endAt'] = endAt
+        KeyConditionExpression += boardId ? ' and ' : '' 
+        KeyConditionExpression += 'createdAt between :startFrom and :endAt'
+      }
+      result = await this.docClient.query({
+          TableName: this.messagesTable,
+          IndexName,
+          KeyConditionExpression,
+          ExpressionAttributeValues
+      }).promise()
     }
-
-    // If start from passed, set the end at to now
-    if (startFrom) {
-      endAt = endAt || new Date().toISOString()
-      ExpressionAttributeValues[':startFrom'] = startFrom
-      ExpressionAttributeValues[':endAt'] = endAt
-      KeyConditionExpression += boardId ? ' and ' : '' 
-      KeyConditionExpression += 'createdAt between :startFrom and :endAt'
-    }
-    const result = await this.docClient.query({
-        TableName: this.messagesTable,
-        IndexName,
-        KeyConditionExpression,
-        ExpressionAttributeValues
-    }).promise()
 
     const items = result.Items
     return items as Message[]        
