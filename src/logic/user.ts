@@ -1,5 +1,5 @@
-import { User } from 'src/models/User'
-import { UserAccess } from 'src/dataLayer/userAccess'
+import { User } from '../../src/models/User'
+import UserAccess from '../../src/dataLayer/userAccess'
 import { v4 as uuidv4 } from 'uuid';
 
 const userAccess = new UserAccess();

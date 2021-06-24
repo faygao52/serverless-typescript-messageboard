@@ -1,6 +1,0 @@
-{
-  "headers": {
-    "Content-Type": "application/json"
-  },
-  "body": "{\"boardId\": \"1\", \"userId\": \"1\", \"content\": \"1\"}"
-}

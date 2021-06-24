@@ -1,7 +1,7 @@
-import { Board } from 'src/models/Board'
-import { BoardAccess } from 'src/dataLayer/boardAccess'
-import { UserAccess } from 'src/dataLayer/userAccess'
-import { UserPostedBoardAccess } from 'src/dataLayer/userPostedBoardAccess'
+import { Board } from '../../src/models/Board'
+import BoardAccess from '../../src/dataLayer/boardAccess'
+import UserAccess from '../../src/dataLayer/userAccess'
+import UserPostedBoardAccess from '../../src/dataLayer/userPostedBoardAccess'
 import { v4 as uuidv4 } from 'uuid'
 
 const boardAccess = new BoardAccess()

@@ -22,6 +22,8 @@ Depending on your preferred package manager, follow the instructions below to de
 
 ## Test Locally
 
+- Run `jest` to run unit tests, dynamoDb unit tests are not included at this point 
+
 In order to test this API locally, you can either start up a offline API by runing:
 
 - `serverless offline start`

@@ -1,9 +1,9 @@
-import * as AWS from 'aws-sdk'
+import { createDynamoDBClient } from '../libs/dynamoDbClient'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { User } from '../models/User'
 
-export class UserAccess {
+export default class UserAccess {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly usersTable = process.env.USERS_TABLE
@@ -38,15 +38,4 @@ export class UserAccess {
     
     return result.Item as User
   }
-}
-function createDynamoDBClient() {
-    if (process.env.IS_OFFLINE) {
-        console.log('Creating a local DynamoDB instance')
-        return new AWS.DynamoDB.DocumentClient({
-            region: 'localhost',
-            endpoint: 'http://localhost:8000'
-        })        
-    }
-
-    return new AWS.DynamoDB.DocumentClient()
 }

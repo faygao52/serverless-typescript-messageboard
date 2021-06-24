@@ -1,9 +1,9 @@
-import * as AWS from 'aws-sdk'
+import { createDynamoDBClient } from '../libs/dynamoDbClient'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 
 import { Message } from '../models/Message'
 
-export class MessageAccess {
+export default class MessageAccess {
   constructor(
     private readonly docClient: DocumentClient = createDynamoDBClient(),
     private readonly messagesTable = process.env.MESSAGES_TABLE,
@@ -49,16 +49,4 @@ export class MessageAccess {
     
     return message
   }
-}
-
-function createDynamoDBClient() {
-  if (process.env.IS_OFFLINE) {
-    console.log('Creating a local DynamoDB instance')
-    return new AWS.DynamoDB.DocumentClient({
-        region: 'localhost',
-        endpoint: 'http://localhost:8000'
-    })        
-  }
-
-  return new AWS.DynamoDB.DocumentClient()
 }
