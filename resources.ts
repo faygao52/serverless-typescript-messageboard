@@ -53,7 +53,7 @@ export default {
         },
         {
           AttributeName: 'boardId',
-          KeyType: 'range'
+          KeyType: 'RANGE'
         }],
         BillingMode: 'PAY_PER_REQUEST',
         TableName: "${self:provider.environment.USER_POSTED_BOARDS_TABLE}"
