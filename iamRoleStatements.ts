@@ -29,6 +29,7 @@ export default [
   {
     Effect: 'Allow',
     Action: [
+      'dynamodb:Scan',
       'dynamodb:PutItem'
     ],
     Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.MESSAGES_TABLE}'
